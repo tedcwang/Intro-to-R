@@ -12,3 +12,4 @@ RStudio Desktop: https://rstudio.com/products/rstudio/download/
 Click on the .rmd link to view the file in GitHub UI. There you should be able to see a button "Raw". Right click "Raw" and choose "Save Link As", then save where ever you wish on your device.
 
 ## More about the data set
+The dataset used in this analysis can be found on the County Health Rankings website, categorized by state and year. This particular dataset was derived from 2018 North Carolina health data.
