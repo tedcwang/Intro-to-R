@@ -7,3 +7,8 @@ Are you interested in R but have no idea where to start? Join us in our Intro to
 Download R and RStudio beforehand to best prepare for the workshop! Both are free!
 R(v4.0.2): https://cloud.r-project.org/
 RStudio Desktop: https://rstudio.com/products/rstudio/download/
+
+## Downloading the .rmd file
+Click on the .rmd link to view the file in GitHub UI. There you should be able to see a button "Raw". Right click "Raw" and choose "Save Link As", then save where ever you wish on your device.
+
+## More about the data set
