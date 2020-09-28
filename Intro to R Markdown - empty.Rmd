@@ -1,0 +1,236 @@
+---
+title: "This is a Title"
+author: "This is Your Name"
+date: "9/19/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+# This is a big title
+## This title is a little smaller
+### And even smaller
+This is normal text
+
+This is a blank template for those interested in typing their own code as they follow along the workshop rather than just watch. The R code segments will not compile correctly, or at all, in their current blank state, as visible from the warnings present in the margins.
+
+## Intro to the Tidyverse
+Let's do some stuff in the Tidyverse.
+
+First, install and load the packages if you have not already.
+
+## Preparation
+```{r check_packages, include = FALSE}
+# This code will install required packages if they are not already installed; don't alter this stuff!
+packageList <- c("tidyverse","readxl", "janitor")
+for (p in packageList) {
+  if (!requireNamespace(p)) {
+    install.packages(p)
+  }
+}
+library(tidyverse)
+library(readxl)
+library(janitor)
+```
+
+Here we load the tidyverse, readxl, and janitor packages. Our focus is on the tidyverse package, but the other two play essential roles in our demo as well.
+
+Make sure to change the name in each R segment. The segment above is titled "check_packages"; to avoid errors in compilation, do not use the same name again elsewhere.
+
+
+## Read and Import
+```{r import}
+# I'm going to create a simple csv file from scratch for demo purposes
+write_file(x="a,b,c\n1,2,3\n4,5,NA", path = "file.csv")
+# Now let's read it in using 'read.csv()'; code goes here:
+
+
+# Now let's do 'read_excel()'
+# For this part, make sure you have the data set from the provided github and include the complete file path to the document
+countyHealth <- read_excel("your file path here", sheet = 4, skip = 1)
+countyHealth
+```
+
+Sheet = 4 means we want to focus on the 4th excel sheet; skip = 1 means we want to skip the first row of cells because they are non-data elements. The "./" segment before the file name simply refers to the same directory as your project.
+
+The 'read_excel()' command originates from the "readxl" package, so it is important that you have it installed and loaded.
+
+
+## Tidy
+### Tibble, gather(), and spread()
+```{r tidy1}
+# Let's create a tibble and work with it
+tibble2 <- tibble(country = c("x","y","z"), "2010" = c("80","82","108"), "2020" = c("901","289","3160"))
+tibble2
+
+# Reorganize the data using 'gather()'
+table <- # your code heree
+table
+
+# Reverse 'gather()' using 'spread()'
+table2 <- # your code here
+table2
+```
+
+In 'gather()', the key and value arguments are used to create new columns for the years 2010 and 2020 and for the number of events. 'spread()' has a similar argument structure, where we specify which columns in which table we want to condense.
+
+### Working with NAs
+```{r tidy2}
+# Let's work with another tibble; this one has missing values
+table3 <- tibble(x1= c("x","y","z","a","b"), x2 = c(10,NA,NA,32,NA))
+table3
+# How do we work with NAs? Drop them?
+table3Drop <- # your code here
+table3Drop
+# Fill them?
+table3Fill <- # your code here
+table3Fill
+# Replace them?
+table3Replace <- # your code here
+table3Replace
+```
+
+Use 'drop_na()' with caution, as it will delete entire rows so long as even just one column contains an NA. Dropping NAs from our data set may have the unintended consequence of decreasing our sample size or eliminating other data components that would have otherwise be useful.
+
+'fill()' and 'replace_na() is useful if we only have one specified marker we want to replace all NAs with; most analyses will replace NAs with 0 to indicate missing data without completely dropping the entire row.
+
+### separate() and unite()
+```{r tidy3}
+# Let's work with yet another tibble here
+tibble3 <- tibble(country = c("Afghanistan","Afghanistan","Brazil","Brazil","China","China"), year = c("1999","2000","1999","2000","1999","2000"), rate = c("1/2","1/3","84/105","85/105","34/162","21/162"))
+tibble3
+
+# To separate values within a column, use 'separate()'
+table4 <- # your code here
+table4
+
+# We can reverse this using 'unite()' and specify a new separator if we want
+# your code here
+```
+
+'separate()' is especially useful if you want to clarify the data you are working with, and even to highlight elements as components of another new column you might wish to create. In this example, we can separate the rate of occurrence into numerator and denominator, then later add a column calculating the rate as a percentage using the numerator and denominator columns.
+
+
+## Manipulate and Transform
+### group_by(), count(), filter(), arrange()
+```{r transform1}
+# mtcars is a preloaded data set contained within RStudio that we can work with anytime
+mtcars
+# If we want a smaller glimpse at a data set, we can use 'head()' to get just a peek
+head(mtcars)
+
+# What does 'group_by()' do? The argument "cyl" here is a column from mtcars. This is also our first example of piping!
+mtcars %>% # your code here
+
+# What if we want to count how many rows are in the "cyl" column?
+mtcars %>% # your code here
+# here we've simply extended our pipe by adding another "%>%" instead of using another line to do so
+
+# I only want cars with a horsepower greater than 200 and engines with 6 or more cylinders. How would I view a table of that?
+mtcars %>% # your code here
+
+# Now I want to view the table in decreasing order to find out the best and worst cars in that category
+mtcars %>% # your code here 
+# arrange will default to arranging your query in ascending order unless you specify descending
+```
+
+As noted in the comments above, 'arrange()' will automatically default to arranging your query in ascending order unless you specifically tell it to arrange it in descending order.
+
+'group_by()', 'filter()', and 'arrange()' are great commands to focus in on certain parts of the data. These commands allow you to do so without actually manipulating the data set in any manner, meaning none of the rest of the data is lost or deleted. The upcoming commands, however, will minipulate the data set accordingly.
+
+### select(), mutate(), renaming, and basic joining
+```{r transform2}
+# 'select()' selects columns of one's choice from the data set and displays only those columns
+mtcars %>% select(# select your own columns)
+# We can also specify which columns to not include, rather than type a bunch of columns that we do want
+mtcars %>% select(# select your own columns)
+
+# 'mutate()' allows you to create columns of your on choosing absent from the original data set; perhaps you want a column specifically for horsepower per ton?
+mtcars %>% # your code here
+
+# Names are finicky; sometimes the data set has ugly preset names and other times people prefer reading camel case (variableName) or snake case (variable_name)
+# How do we change naming conventions here?
+# We can rename them entirely
+mtcarsHP <- # your code here
+mtcarsHP
+
+# Sometimes you have two data separate data sets you want to work with. It's inefficient and complicated to work with them separately, so we can join them to simplify things
+mtcars1 <- rownames_to_column(mtcars, var="car_model") %>% select(-qsec, -disp, -cyl)   # making a data table from mtcars without qsec, disp, and cyl columns
+mtcars2 <- rownames_to_column(mtcars, var = "car_model") %>% select(-mpg, -hp, -wt)   # making a data table from mtcars without mpg, hp, and wt columns
+mtcarsJoin  <- left_join(mtcars1, mtcars2, by="car_model")   # join them together
+head(mtcars1)
+head(mtcars2)
+head(mtcarsJoin)
+```
+
+The argument structure for 'mutate()' specifies the new column name first (hpPerTon) followed by what the column is comprised of the hp (horsepower) column divided by the wt (weight) column.
+
+You should only join different data sets/tables together if they have a shared element between them (say if both have a column for car names). Otherwise, you can use 'mutate()' to create those shared columns if need be. Another thing to note is that left joins can easily delete large amounts of data if done improperly. The order in which you specify the tables to join is critical; in the example above, we are joinig mtcars2 to mtcars1. That means everything shared in the mtcars2 data set is being added to the mtcars1 data set. If the mtcars1 dataset does not contain a car present in mtcars2, then the join will delete that car data. Conversely, if mtcars1 contains a car that mtcars2 doesn't then joining will leave that car with missing data from mtcars2.
+
+### Putting it All Together
+```{r transform3}
+# Let's work with our county health data set now! Look in the downloaded dataset to search for you own variables if you wish; make sure you include relevant Tidyverse commands to clean up and manipulate your data as you prefer
+countyVariables <- countyHealth %>% select(c("your chosen variables here")) %>% clean_names(case = "snake") %>% drop_na()
+head(countyVariables)
+```
+
+The code chunk above may look complicated, but its easy to read if we separate it into smaller parts. At the very beginning of this document, we read in an excel file and called it "countyHealth". We are now selecting certain variables from that data set (County, Mentally Unhealthy Days, Average Daily PM2.5, Food Environment Index), renaming some of them (Average Daily PM2.5 is renamed to Air Quality Score Rating) and cleaning some names to fit snake case (variable_name).
+
+'clean_names()' comes from the "janitor" package we loaded in earlier; it simply adjusts the column names to fit a certain case (camel, snake, etc.).
+
+
+## Visualize
+
+So far, we've read in our data, tidied it up, and transformed it. Now it is time to visualize it and actually see it! Below are just a few simple plots that we can create; there are plenty more complicated ones that I haven't touched here.
+```{r visualize1}
+# We can make a dazzling array of plots if we wish. Here's a simple scatter plot
+countyVariables %>% ggplot(aes(x = food_environment_index, y = mentally_unhealthy_days)) + geom_point() +  theme_minimal() + theme(axis.text.y = element_text(size = 6))
+
+# Add in some regression, color, and titling
+countyVariables %>% ggplot(aes(x = food_environment_index, y = mentally_unhealthy_days)) + geom_point(color = "maroon") + geom_smooth() + labs(title = "Food Environment Index vs Mentally Unhealthy Days") + theme_minimal() + theme(axis.text.y = element_text(size = 6))
+
+# Maybe we want to see a histogram?
+countyVariables %>% ggplot(aes(x = air_quality_score_rating)) + geom_histogram(fill = "maroon") + labs(title = "Histogram of Air Quality Score Ratings") + theme_minimal() + theme(axis.text.y = element_text(size = 6))
+
+# Try your own plot?
+# your code here
+```
+
+Tidyverse includes the "ggplot2" package, which is a huge improvement over R's basic graphics. We use the command 'ggplot()' and numerous following arguments to create a plot according to our specifications. These types of plots are highly customizable, ranging from type of plot to color, theme, layout, titles, scales, and even interactivity.
+
+Here are the main components you should focus on:
+
+"aes(x=,y=)" is an argument where you input your variables from the data set. Note that for histograms, you only need "aes(x=)" because you only want to show counts for one variable, not two.
+
+"geom_TYPE()" specifies what type of plot you want to make. The first two plots use "geom_point()", which denotes a scatter plot. "geom_histogram()" similarly denotes a histogram. There are various other types of plots such as "geom_line()", "geom_bar()", and "geom_path()" to name a few. You can even specify certain colors within "geom_TYPE()" to give your visual a little splash of color.
+
+"labs()" is where you input any axis labels or titles for your plots. Make sure to include your titles within quotation marks!
+
+"geom_smooth()" fits a basic regression line to scatter plots.
+
+"theme_minimal()" and "theme()" simply change the appearance of certain parts of the plot; these arguments can be played around with to your heart's content.
+
+
+## That's all!
